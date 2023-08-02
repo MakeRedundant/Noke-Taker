@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/MakeRedundant/Noke-Taker/issues"
   },
-  "homepage": "https://github.com/MakeRedundant/Noke-Taker#readme"
+  "homepage": "https://github.com/MakeRedundant/Noke-Taker#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
