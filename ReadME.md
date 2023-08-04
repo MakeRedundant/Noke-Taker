@@ -15,7 +15,7 @@ Heroku to handle deployment and hosting of the web application.
 * [Installation](#installation)
 * [Usage](#usage)
 * [Screenshot](#screenshot)
-* [Deployed_Link](#deployed link)
+* [Deployed Link](#deployed-link)
 * [License](#license)
 * [Contributing](#contributing)
 * [Tests](#tests)
