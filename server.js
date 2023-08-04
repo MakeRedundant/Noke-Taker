@@ -47,14 +47,18 @@ app.post("/notes", (req, res) => {
 
   const savedNotes = fs.readFileSync("./db/db.json"); //reads notes from db.json and also parses the JSON data into an array 
   const notesArray = JSON.parse(savedNotes);
-//notes added into new array
+//notes added into new array with push
   notesArray.push(newNote);
 
   const addData = JSON.stringify(notesArray);
-  fs.writeFile("./db/db.json", addData, (err) => {
-    err ? console.error("Unsuccessful! No new note was added") : console.log("Successful!!" ); //ternary exp checks if error is truthy
-  });
-  res.json("A new note has been added!");
+fs.writeFile("./db/db.json", addData, (err) => {
+  if (err) {
+    console.error("Unsuccessful! No new note was added");
+  } else {
+    console.log("Successful!!");
+  }
+});
+res.json("A new note has been added!");
 });
 
 // Deletes a note and updates/refreshes the page
