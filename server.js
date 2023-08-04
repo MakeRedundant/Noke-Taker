@@ -39,41 +39,52 @@ app.get("/api/notes", (req, res) => {
  //POST request to the /notes URL which adds a new note to a JSON file 
 app.post("/notes", (req, res) => {
   
-  // Adds a unique ID to each note being added to the JSON file
+  // Adds a unique ID to each note, useful for the delete feature
 
-  const { title, text } = req.body;
-  const id = uuid();
-  const newNote = { title, text, id };
+  const { title, text } = req.body; //destructuring assignment to extract title and text from req.body
+  const id = uuid(); //Universally Unique Identifier used to generate unique IDs
+  const newNote = { title, text, id }; 
 
-  const savedNotes = fs.readFileSync("./db/db.json");
-  const savedArray = JSON.parse(savedNotes);
+  const savedNotes = fs.readFileSync("./db/db.json"); //reads notes from db.json and also parses the JSON data into an array 
+  const notesArray = JSON.parse(savedNotes);
+//notes added into new array
+  notesArray.push(newNote);
 
-  savedArray.push(newNote);
-
-  const newData = JSON.stringify(savedArray);
-  fs.writeFile("./db/db.json", newData, (err) => {
-    err ? console.error("Unsuccessful! No new note was added") : console.log("Successful!!" );
+  const addData = JSON.stringify(notesArray);
+  fs.writeFile("./db/db.json", addData, (err) => {
+    err ? console.error("Unsuccessful! No new note was added") : console.log("Successful!!" ); //ternary exp checks if error is truthy
   });
   res.json("A new note has been added!");
 });
 
 // Deletes a note and updates/refreshes the page
 
-app.delete("/api/notes/:id", (req, res) => {
-  const deleteData = fs.readFileSync("./db/db.json");
-  const deleteArray = JSON.parse(deleteData);
+app.delete("/api/notes/:id", (req, res) => { // need to stringify the data  because fs.writeFile needs it in string format 
+  // Reads the existing notes data from the JSON file
+  const existingData = fs.readFileSync("./db/db.json");
+  const notesArray = JSON.parse(existingData);
 
-  newArray = deleteArray.filter(function (item) {
-    return item.id != req.params.id;
+  // Creates a new array without the note with the specified ID
+  const updatedArray = notesArray.filter(item => item.id !== req.params.id);
+
+  // Convert the updated array to JSON format
+  const updatedData = JSON.stringify(updatedArray);
+
+  // Write the updated data back to the JSON file
+  fs.writeFile("./db/db.json", updatedData, (err) => {
+    if (err) {
+      console.error("Unsuccessful!");
+    } else {
+      console.log("Successful!");
+    }
   });
 
-  const newArrayFile = JSON.stringify(newArray);
-  fs.writeFile("./db/db.json", newArrayFile, (err) => {
-    err ? console.error("Unsuccessful!") : console.log("Successful!");
-  });
+  // Send a response indicating the note was deleted
   res.json("A note has successfully been deleted!");
 });
 
-// Listening on PORT 3001
 
+// Listening at PORT 3001
+ //starts the express.js server and makes it listen on the PORT using the app.listern(port... method)
 app.listen(PORT, () => console.log(`Listening at http://localhost:${PORT}`));
+
