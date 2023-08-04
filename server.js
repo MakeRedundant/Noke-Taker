@@ -71,7 +71,7 @@ app.delete("/api/notes/:id", (req, res) => { // need to stringify the data  beca
   const existingData = fs.readFileSync("./db/db.json");
   const notesArray = JSON.parse(existingData);
 
-  // Creates a new array without the note with the specified ID
+  // Creates a new array without the note with the specific ID
   const updatedArray = notesArray.filter(item => item.id !== req.params.id);
 
   // Convert the updated array to JSON format
